@@ -1,0 +1,158 @@
+/* 🌟 Global Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* 🌞 Light Mode Background */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #f4f4f9;
+    color: #333;
+}
+
+/* 💬 Chat Container */
+.chat-container {
+    width: 95%;
+    max-width: 450px;
+    height: 85vh;
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* 🔥 Chat Header */
+.chat-header {
+    background: #007bff;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* 📜 Chat Messages */
+.chat-box {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    scrollbar-width: thin;
+}
+
+/* 🏆 Messages - Chat Bubbles */
+.message {
+    max-width: 75%;
+    padding: 12px 15px;
+    border-radius: 18px;
+    font-size: 14px;
+    position: relative;
+    opacity: 0;
+    animation: fadeIn 0.3s ease-in forwards;
+}
+
+/* Sender Messages (Right) */
+.sent {
+    align-self: flex-end;
+    background: #007bff;
+    color: white;
+    border-bottom-right-radius: 5px;
+}
+
+/* Receiver Messages (Left) */
+.received {
+    align-self: flex-start;
+    background: #f0f0f0;
+    color: black;
+    border-bottom-left-radius: 5px;
+}
+
+/* 📩 Typing Input */
+.chat-input {
+    display: flex;
+    padding: 10px;
+    background: #ffffff;
+    border-top: 2px solid #ddd;
+}
+
+.chat-input input {
+    flex: 1;
+    padding: 12px;
+    font-size: 15px;
+    border: 2px solid #ddd;
+    border-radius: 25px;
+    outline: none;
+    background: #f9f9f9;
+    color: black;
+    padding-left: 15px;
+}
+
+.chat-input input::placeholder {
+    color: #999;
+}
+
+/* 🚀 Send Button */
+.chat-input button {
+    margin-left: 10px;
+    padding: 12px 18px;
+    border: none;
+    background: #007bff;
+    color: white;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+    font-size: 16px;
+}
+
+.chat-input button:hover {
+    background: #005fcc;
+}
+
+/* 🎭 Scrollbar */
+.chat-box::-webkit-scrollbar {
+    width: 5px;
+}
+
+.chat-box::-webkit-scrollbar-thumb {
+    background: #007bff;
+    border-radius: 10px;
+}
+
+/* 🌀 Fade In Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.online-users {
+    background: #fff;
+    padding: 10px;
+    border-bottom: 2px solid #ddd;
+    font-size: 14px;
+}
+
+.online-users ul {
+    list-style: none;
+    padding: 0;
+}
+
+.online-users li {
+    color: #007bff;
+    font-weight: bold;
+}
+

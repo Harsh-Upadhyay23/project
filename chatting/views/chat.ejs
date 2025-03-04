@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Room</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+
+    <div class="chat-container">
+        <div class="chat-header">
+            Welcome, <%= username %>
+        </div>
+
+        <!-- ✅ Online Users List -->
+        <!-- <div class="online-users">
+            <strong>Online Users:</strong>
+            <ul id="online-users-list"></ul>
+        </div> -->
+
+        <!-- ✅ Typing Status -->
+        <div id="typing-status" class="typing-status"></div>
+
+        <!-- ✅ Chat Box -->
+        <div id="messages" class="chat-box"></div>
+
+        <!-- ✅ Chat Input -->
+        <div class="chat-input">
+            <input type="text" id="message" placeholder="Type a message..." oninput="userTyping()">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        const socket = io();
+        const username = "<%= username %>"; 
+        let typingTimer;
+
+        // ✅ Notify server that user is online
+        socket.emit("user connected", username);
+
+        function sendMessage() {
+            const messageInput = document.getElementById("message");
+            const message = messageInput.value.trim();
+            if (message === "") return;
+            
+            socket.emit("chat message", { sender: username, receiver: "all", message });
+            
+            // ✅ Show message immediately for sender
+            displayMessage(username, message, true);
+
+            messageInput.value = "";
+        }
+
+        socket.on("chat message", (data) => {
+            if (data.sender !== username) {
+                displayMessage(data.sender, data.message, false);
+            }
+        });
+
+        // ✅ Function to display messages
+        function displayMessage(sender, message, isSender) {
+            const messageBox = document.getElementById("messages");
+            const msgDiv = document.createElement("div");
+            msgDiv.classList.add("message");
+            msgDiv.classList.add(isSender ? "sent" : "received");
+            msgDiv.innerHTML = `<strong>${sender}:</strong> ${message}`;
+            messageBox.appendChild(msgDiv);
+            messageBox.scrollTop = messageBox.scrollHeight;
+        }
+
+        // ✅ Update Online Users List
+        socket.on("update users", (users) => {
+            const userList = document.getElementById("online-users-list");
+            userList.innerHTML = "";
+            users.forEach(user => {
+                const li = document.createElement("li");
+                li.textContent = user;
+                userList.appendChild(li);
+            });
+        });
+
+        // ✅ Typing Status Feature
+        function userTyping() {
+            socket.emit("typing", username);
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(() => {
+                socket.emit("stop typing", username);
+            }, 2000); // Stop showing after 2 sec of inactivity
+        }
+
+        socket.on("typing", (user) => {
+            if (user !== username) {
+                document.getElementById("typing-status").textContent = `${user} is typing...`;
+            }
+        });
+
+        socket.on("stop typing", (user) => {
+            if (user !== username) {
+                document.getElementById("typing-status").textContent = "";
+            }
+        });
+    </script>
+
+</body>
+</html>
